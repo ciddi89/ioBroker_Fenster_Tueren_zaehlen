@@ -56,7 +56,7 @@ let lastDoorOpened_count = null;
 let lastWindowOpened_count = null;
 
 //Datenpunkte erstellen falls nicht vorhanden (Werden bei Skriptstart erstellt)
-async function createDPs() {
+function createDPs() {
     //Türen Datenpunkte erstellen
     if (!existsObject(dp_number_doors_total)) {
         createState(dp_number_doors_total, 0, {name: anzahl_tueren_gesamt, type: "number", unit: 'Tür(en)'}, function (){
