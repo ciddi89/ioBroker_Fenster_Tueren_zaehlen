@@ -1,2 +1,2 @@
-# ioBrokerJavascripte
-Here I will publish useful scripts for ioBroker.
+# ioBroker Fenster und Türen zählen
+Mit diesen Javascript werden Fenster und Türen die mit einer alias unter Aufzählung gespeichert sind gezählt.
