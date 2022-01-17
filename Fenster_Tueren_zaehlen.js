@@ -2,7 +2,7 @@
 Script zum Zählen der geöffneten/geschlossen Fenster und Türen + Liste erstellen der geöffneten Fenster
 erstellt von Christian Behrends (ciddi89)
 Github: https://github.com/ciddi89
-zuletzt geändert am 16.01.2022
+zuletzt geändert am 17.01.2022
 */
 
 //Alias der zu zählenden Fenster und Türen
@@ -12,6 +12,10 @@ let aliasWindows = 'alias_fenster';
 //Selektoren
 const selector_doors =  $('state[id=*](functions=' + aliasDoors + ')');
 const selector_windows = $('state[id=*](functions=' + aliasWindows + ')');
+
+//Auswählen bei welchen Werte die Fenster und Türen geöffnet/geschlossen sind
+let isOpen = 1;     //['true', 'offen', 'open', 'opened', '1'];
+let isClosed = 0;   //['false', 'geschlossen', 'closed', '0']; 
 
 //Datenpunkte
 //Alias
@@ -52,8 +56,6 @@ const dp_window_last_opened     = dp_mainPath + '.' + fenster + '.' + fenster_zu
 
 //Counters
 let jsStart_count = null;
-let lastDoorOpened_count = null;
-let lastWindowOpened_count = null;
 
 //Datenpunkte erstellen falls nicht vorhanden (Werden bei Skriptstart erstellt)
 function createDPs() {
@@ -68,10 +70,10 @@ function createDPs() {
         createState(dp_number_doors_open, 0, {name: anzahl_tueren_geoeffnet, type: "number", unit: 'Tür(en)'}, function (){
             log('Datenpunkt '+ anzahl_tueren_geoeffnet +' wurde erstellt'); });};
     if (!existsObject(dp_list_doors_open)) {
-        createState(dp_list_doors_open, {name: liste_tueren_geoeffnet, type: "string"}, function (){
+        createState(dp_list_doors_open, '', {name: liste_tueren_geoeffnet, type: "string"}, function (){
             log('Datenpunkt '+ liste_tueren_geoeffnet +' wurde erstellt'); });};
     if (!existsObject(dp_door_last_opened)) {
-        createState(dp_door_last_opened, {name: tuer_zuletzt_geoeffnet, type: "string"}, function (){
+        createState(dp_door_last_opened, '', {name: tuer_zuletzt_geoeffnet, type: "string"}, function (){
             log('Datenpunkt '+ tuer_zuletzt_geoeffnet +' wurde erstellt'); });};
 
     //Fenster Datenpunkte erstellen
@@ -85,10 +87,10 @@ function createDPs() {
         createState(dp_number_windows_open, 0, {name: anzahl_fenster_geoeffnet, type: "number", unit: 'Fenster'}, function (){
             log('Datenpunkt '+ anzahl_fenster_geoeffnet +' wurde erstellt'); });};
     if (!existsObject(dp_list_windows_open)) {
-        createState(dp_list_windows_open, {name: liste_fenster_geoeffnet, type: "string"}, function (){
+        createState(dp_list_windows_open, '', {name: liste_fenster_geoeffnet, type: "string"}, function (){
             log('Datenpunkt '+ liste_fenster_geoeffnet +' wurde erstellt'); });};
     if (!existsObject(dp_window_last_opened)) {
-        createState(dp_window_last_opened, {name: fenster_zuletzt_geoeffnet, type: "string"}, function (){
+        createState(dp_window_last_opened, '', {name: fenster_zuletzt_geoeffnet, type: "string"}, function (){
             log('Datenpunkt '+ fenster_zuletzt_geoeffnet +' wurde erstellt'); });};
 }
 
@@ -99,7 +101,6 @@ function count_doors() {
     let doorsClosed = 0;
     let doorsTotal = 0;
     let list_doorsOpen = [];
-    let last_doorOpened = [];
 
     let doors = getObject('enum.functions.' + aliasDoors).common.members;
 
@@ -107,15 +108,14 @@ function count_doors() {
 for (let i = 0; i < doors.length; i++) {
         let val_doors = getState(doors[i]).val;
         doorsTotal = (typeof doorsTotal == 'number' ? doorsTotal : 0) + 1;
-            if (val_doors == 1) {
+            if (val_doors == isOpen) {
                 doorsOpen = (typeof doorsOpen == 'number' ? doorsOpen : 0) + 1;
                 list_doorsOpen.push(getObject(doors[i]).common.name)
-                last_doorOpened.unshift(getObject(doors[i]).common.name)
             }
     }
     for (let i = 0; i < doors.length; i++) {
         let val_doors = getState(doors[i]).val;
-            if (val_doors == 0) {
+            if (val_doors == isClosed) {
                 doorsClosed = (typeof doorsClosed == 'number' ? doorsClosed : 0) + 1;
             }
     }
@@ -132,12 +132,6 @@ for (let i = 0; i < doors.length; i++) {
     }
     else {
         setState(dp_list_doors_open, String(list_doorsOpen.join(', ')));
-        setState(dp_door_last_opened, String(last_doorOpened.join(', ')));
-        lastDoorOpened_count = setTimeout(function() {
-            last_doorOpened = [];
-            setState(dp_door_last_opened, String(last_doorOpened)) 
-        }, 30000)
-
     }
 }
 
@@ -148,7 +142,6 @@ function count_windows() {
     let windowsClosed = 0;
     let windowsTotal = 0;
     let list_windowsOpen = [];
-    let last_windowOpened = [];
 
     let windows = getObject('enum.functions.' + aliasWindows).common.members;
 
@@ -156,15 +149,14 @@ function count_windows() {
 for (let i = 0; i < windows.length; i++) {
         let val_windows = getState(windows[i]).val;
         windowsTotal = (typeof windowsTotal == 'number' ? windowsTotal : 0) + 1;
-            if (val_windows == 1) {
+            if (val_windows == isOpen) {
                 windowsOpen = (typeof windowsOpen == 'number' ? windowsOpen : 0) + 1;
                 list_windowsOpen.push(getObject(windows[i]).common.name)
-                last_windowOpened.unshift(getObject(windows[i]).common.name)
             }
     }
     for (let i = 0; i < windows.length; i++) {
         let val_windows = getState(windows[i]).val;
-            if (val_windows == 0) {
+            if (val_windows == isClosed) {
                 windowsClosed = (typeof windowsClosed == 'number' ? windowsClosed : 0) + 1;
             }
     }
@@ -181,12 +173,6 @@ for (let i = 0; i < windows.length; i++) {
     }
     else {
         setState(dp_list_windows_open, String(list_windowsOpen.join(', ')));
-        setState(dp_window_last_opened, String(last_windowOpened.join(', ')));
-        lastWindowOpened_count = setTimeout(function() {
-            last_windowOpened = [];
-            setState(dp_window_last_opened, String(last_windowOpened)) 
-        }, 30000)
-
     }
 }
 
@@ -197,10 +183,17 @@ function main() {
     //Bei state Änderung einer Tür auslösen und zählen
     selector_doors.on(function (obj) {
         count_doors();
+        if (obj.state.val == 1) {
+            setState(dp_door_last_opened, String((obj).common.name));  
+        }
     });
+
     //Bei state Änderung eines Fenster auslösen und zählen
     selector_windows.on(function (obj) {
         count_windows();
+        if (obj.state.val == 1) {
+            setState(dp_window_last_opened, String((obj).common.name));  
+        }
     });
     
     jsStart_count = setTimeout(function() {
