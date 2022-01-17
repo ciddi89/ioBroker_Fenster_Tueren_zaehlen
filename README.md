@@ -5,8 +5,6 @@ Alle Fenster und Türen die mitgezählt werden sollen, sollten daher am Anfang u
 
 Die Datenpunkte werden selbst erstellt. Falls ein anderer Pfad gewünscht ist, kann dieser in Zeile 35 geändert werden. Aktuell ist der Pfad: "0_userdata.0.Datenpunkte.Haus". In diesem werden zwei Unterordner erstellt namens "Fenster" und "Türen". Wo wiederum in diesen Ordnern die erforderlichen Datenpunkte erstellt werden. (Siehe Screenshot) Bitte beachtet das die erstellung evtl. ein paar Sekunden dauern kann und die Datenpunkte nicht sofort zur Verfügung stehen.
 
-Die Datenpunkte "Name_Tür_zuletzt_geöffnet" und "Name_Fenster_zuletzt_geöffnet" zeigen nur Temporär den Wert an und setzen sich nach 30 Sekunden wieder zurück auf einen leeren Wert.
-
 Bei Fragen oder Änderungswünsche einfach ein Issue erstellen.
 
 <img width="1310" alt="Datenpunkte Fenster" src="https://user-images.githubusercontent.com/66088020/149665625-6037c539-03a2-4154-b48c-a8238d9df5a9.png">
