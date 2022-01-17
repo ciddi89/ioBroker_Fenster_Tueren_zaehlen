@@ -104,35 +104,36 @@ function count_doors() {
 
     let doors = getObject('enum.functions.' + aliasDoors).common.members;
 
+for (let i = 0; i < doors.length; i++) {
+    let val_doors = getState(doors[i]).val;
+    doorsTotal = doorsTotal + 1;
+    if (val_doors == isOpen) {
+        doorsOpen = doorsOpen + 1;
+        list_doorsOpen.push(getObject(doors[i]).common.name)
+    }
+}
 
 for (let i = 0; i < doors.length; i++) {
-        let val_doors = getState(doors[i]).val;
-        doorsTotal = doorsTotal + 1;
-            if (val_doors == isOpen) {
-                doorsOpen = doorsOpen + 1;
-                list_doorsOpen.push(getObject(doors[i]).common.name)
-            }
+    let val_doors = getState(doors[i]).val;
+    if (val_doors == isClosed) {
+        doorsClosed = doorsClosed + 1;
     }
-    for (let i = 0; i < doors.length; i++) {
-        let val_doors = getState(doors[i]).val;
-            if (val_doors == isClosed) {
-                doorsClosed = doorsClosed + 1;
-            }
-    }
-    //Datenpunkte befüllen
-    setState(dp_number_doors_total, doorsTotal);
-    setState(dp_number_doors_closed, doorsClosed);
-    setState(dp_number_doors_open, doorsOpen);
+}
 
-    if (doorsOpen == 0) {
-        setState(dp_list_doors_open, ('Alle Türen sind geschlossen.'))
-    } 
+//Datenpunkte befüllen
+setState(dp_number_doors_total, doorsTotal);
+setState(dp_number_doors_closed, doorsClosed);
+setState(dp_number_doors_open, doorsOpen);
+
+if (doorsOpen == 0) {
+    setState(dp_list_doors_open, ('Alle Türen sind geschlossen.'))
+} 
     else if (doorsOpen == doorsTotal) {
         setState(dp_list_doors_open, ('Alle Türen sind geöffnet'))
     }
-    else {
-        setState(dp_list_doors_open, String(list_doorsOpen.join(', ')));
-    }
+        else {
+            setState(dp_list_doors_open, String(list_doorsOpen.join(', ')));
+        }
 }
 
 //Fenster
@@ -147,39 +148,42 @@ function count_windows() {
 
 
 for (let i = 0; i < windows.length; i++) {
-        let val_windows = getState(windows[i]).val;
-        windowsTotal = windowsTotal + 1;
-            if (val_windows == isOpen) {
-                windowsOpen = windowsOpen + 1;
-                list_windowsOpen.push(getObject(windows[i]).common.name)
-            }
+    let val_windows = getState(windows[i]).val;
+    windowsTotal = windowsTotal + 1;
+    if (val_windows == isOpen) {
+        windowsOpen = windowsOpen + 1;
+        list_windowsOpen.push(getObject(windows[i]).common.name)
     }
-    for (let i = 0; i < windows.length; i++) {
-        let val_windows = getState(windows[i]).val;
-            if (val_windows == isClosed) {
-                windowsClosed = windowsClosed + 1;
-            }
-    }
-    //Datenpunkte befüllen
-    setState(dp_number_windows_total, windowsTotal);
-    setState(dp_number_windows_closed, windowsClosed);
-    setState(dp_number_windows_open, windowsOpen);
+}
 
-    if (windowsOpen == 0) {
-        setState(dp_list_windows_open, ('Alle Fenster sind geschlossen.'))
-    } 
+for (let i = 0; i < windows.length; i++) {
+    let val_windows = getState(windows[i]).val;
+    if (val_windows == isClosed) {
+        windowsClosed = windowsClosed + 1;
+    }
+}
+
+//Datenpunkte befüllen
+setState(dp_number_windows_total, windowsTotal);
+setState(dp_number_windows_closed, windowsClosed);
+setState(dp_number_windows_open, windowsOpen);
+
+if (windowsOpen == 0) {
+    setState(dp_list_windows_open, ('Alle Fenster sind geschlossen.'))
+} 
     else if (windowsOpen == windowsTotal) {
         setState(dp_list_windows_open, ('Alle Fenster sind geöffnet'))
     }
-    else {
-        setState(dp_list_windows_open, String(list_windowsOpen.join(', ')));
-    }
+        else {
+            setState(dp_list_windows_open, String(list_windowsOpen.join(', ')));
+        }
 }
 
 //Main function
 function main() {
     //Datenpunkte sofort erstellen
     createDPs();
+
     //Bei state Änderung einer Tür auslösen und zählen
     selector_doors.on(function (obj) {
         count_doors();
@@ -200,6 +204,6 @@ function main() {
         count_doors();
         count_windows();
         }, 2000);
-    };
+};
 
 main();
