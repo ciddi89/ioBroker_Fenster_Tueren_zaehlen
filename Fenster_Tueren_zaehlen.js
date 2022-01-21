@@ -1,24 +1,33 @@
 /*
-Script zum Zählen der geöffneten/geschlossen Fenster und Türen + Liste erstellen der geöffneten Fenster
+Script zum Zählen der geöffneten/geschlossen Fenster und Türen + Liste erstellen der offenen Elemente.
 erstellt von Christian Behrends (ciddi89)
 Github: https://github.com/ciddi89
-zuletzt geändert am 17.01.2022
+zuletzt geändert am 21.01.2022
 */
 
-//Alias der zu zählenden Fenster und Türen
+
+// Alias der zu zählenden Fenster und Türen. Bitte ändern,
+// wenn eure Alias in der Aufzählung anders lautet. 
 let aliasDoors      = 'alias_tueren';
 let aliasWindows    = 'alias_fenster';
 
-//Selektoren
+
+// Hauptpfad - Kann angepasst werden, wenn die Datenpunkte woanders gespeichert werden soll.
+// im Hauptpfad werden noch zwei Unterornder angelegt namens 'Türen' und 'Fenster'. 
+const dp_mainPath = '0_userdata.0.Datenpunkte.Haus';
+
+
+// Ab hier bitte nur Änderung vornehmen wenn ihr wisst was ihr tut.
+
+// Selektoren
 const selector_doors    = $('state[id=*](functions=' + aliasDoors + ')');
 const selector_windows  = $('state[id=*](functions=' + aliasWindows + ')');
 
-//Auswählen bei welchen Werte die Fenster und Türen geöffnet/geschlossen sind
-let isOpen = 1;     //['true', 'offen', 'open', 'opened', '1'];
-let isClosed = 0;   //['false', 'geschlossen', 'closed', '0']; 
+// Auswählen bei welchen Werte die Fenster und Türen geöffnet/geschlossen sind
+let isOpen      = 1; //['true', 'offen', 'open', 'opened', '1'];
+let isClosed    = 0; //['false', 'geschlossen', 'closed', '0']; 
 
-//Datenpunkte
-//Alias
+// Alias
 let tueren  = 'Türen';
 let fenster = 'Fenster';
 
@@ -34,11 +43,8 @@ let anzahl_fenster_geoeffnet     = 'Anzahl_Fenster_geöffnet';
 let liste_fenster_geoeffnet      = 'Liste_Fenster_geöffnet';
 let fenster_zuletzt_geoeffnet    = 'Name_Fenster_zuletzt_geöffnet';
 
-
-//Hauptpfad
-const dp_mainPath = '0_userdata.0.Datenpunkte.Haus';
-
-//Türen
+//Datenpunkte
+// Türen
 const dp_number_doors_total     = dp_mainPath + '.' + tueren + '.' + anzahl_tueren_gesamt;
 const dp_number_doors_closed    = dp_mainPath + '.' + tueren + '.' + anzahl_tueren_geschlossen;
 const dp_number_doors_open      = dp_mainPath + '.' + tueren + '.' + anzahl_tueren_geoeffnet;
@@ -46,7 +52,7 @@ const dp_number_doors_open      = dp_mainPath + '.' + tueren + '.' + anzahl_tuer
 const dp_list_doors_open        = dp_mainPath + '.' + tueren + '.' + liste_tueren_geoeffnet;
 const dp_door_last_opened       = dp_mainPath + '.' + tueren + '.' + tuer_zuletzt_geoeffnet;
 
-//Fenster
+// Fenster
 const dp_number_windows_total   = dp_mainPath + '.' + fenster + '.' + anzahl_fenster_gesamt;
 const dp_number_windows_closed  = dp_mainPath + '.' + fenster + '.' + anzahl_fenster_geschlossen;
 const dp_number_windows_open    = dp_mainPath + '.' + fenster + '.' + anzahl_fenster_geoeffnet;
@@ -54,7 +60,7 @@ const dp_number_windows_open    = dp_mainPath + '.' + fenster + '.' + anzahl_fen
 const dp_list_windows_open      = dp_mainPath + '.' + fenster + '.' + liste_fenster_geoeffnet;
 const dp_window_last_opened     = dp_mainPath + '.' + fenster + '.' + fenster_zuletzt_geoeffnet;
 
-//Counters
+// Counters
 let jsStart_count = null;
 
 //Datenpunkte erstellen falls nicht vorhanden (Werden bei Skriptstart erstellt)
@@ -200,6 +206,7 @@ function main() {
         }
     });
     
+    //Bei Skriptstart Türen und Fenster zählen und Datenpunkte befüllen
     jsStart_count = setTimeout(function() {
         count_doors();
         count_windows();
