@@ -14,7 +14,7 @@ let aliasWindows    = 'alias_fenster';
 
 // Hauptpfad - Kann angepasst werden, wenn die Datenpunkte woanders gespeichert werden soll.
 // im Hauptpfad werden noch zwei Unterornder angelegt namens 'Türen' und 'Fenster'. 
-const dp_mainPath = '0_userdata.0.Datenpunkte.Haus';
+const dp_mainPath = '0_userdata.0.Haus';
 
 
 // Ab hier bitte nur Änderung vornehmen wenn ihr wisst was ihr tut.
@@ -59,9 +59,6 @@ const dp_number_windows_open    = dp_mainPath + '.' + fenster + '.' + anzahl_fen
 
 const dp_list_windows_open      = dp_mainPath + '.' + fenster + '.' + liste_fenster_geoeffnet;
 const dp_window_last_opened     = dp_mainPath + '.' + fenster + '.' + fenster_zuletzt_geoeffnet;
-
-// Counters
-let jsStart_count = null;
 
 //Datenpunkte erstellen falls nicht vorhanden (Werden bei Skriptstart erstellt)
 function createDPs() {
@@ -207,10 +204,10 @@ function main() {
     });
     
     //Bei Skriptstart Türen und Fenster zählen und Datenpunkte befüllen
-    jsStart_count = setTimeout(function() {
+    setTimeout(function() {
         count_doors();
         count_windows();
-        }, 2000);
+    }, 2000);
 };
 
 main();
